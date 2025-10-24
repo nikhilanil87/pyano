@@ -1,0 +1,15 @@
+1. GUI
+2. Play notes
+3. Octave changing
+4. Switching keys
+5. Being able to select your own keys
+6. Being able to record
+6. KEYBOARD like harmonium, electronic piano
+7. SUSTAIN OPTION
+
+
+FUTURE
+
+1. soft presses based on timing betwwen press and release
+2. rectangles that move upwards when you play a key, like the youtube videos and also sparkles
+3. HIDE THE OPTION BUTTONS
