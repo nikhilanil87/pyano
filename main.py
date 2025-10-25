@@ -1,4 +1,5 @@
 import pygame
+from pydub import AudioSegment
 
 pygame.init()
 pygame.mixer.init()
@@ -105,8 +106,10 @@ WHITE_KEY_HEIGHT = 300
 BLACK_KEY_WIDTH = WHITE_KEY_WIDTH / 1.7
 BLACK_KEY_HEIGHT = WHITE_KEY_HEIGHT / 1.5
 
+SETTINGS_HEIGHT = 150
+
 SCREEN_WIDTH = 28 * WHITE_KEY_WIDTH
-SCREEN_HEIGHT = WHITE_KEY_HEIGHT + 5
+SCREEN_HEIGHT = WHITE_KEY_HEIGHT + SETTINGS_HEIGHT
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -116,9 +119,9 @@ BLACK_KEYS = []
 
 def render_gui():
     pygame.display.set_caption(f'Pyano - Octaves {octaves}')
-    screen.fill(BLACK)
+    screen.fill((143, 140, 140))
     for i, key in enumerate(WHITE_KEYS):
-        white_rect = pygame.Rect(i * WHITE_KEY_WIDTH, 0, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT)
+        white_rect = pygame.Rect(i * WHITE_KEY_WIDTH, SETTINGS_HEIGHT, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT)
         color = BLUE if key in pressed_keys else WHITE
         pygame.draw.rect(screen, color, white_rect)
         pygame.draw.rect(screen, (55, 60, 69), white_rect, 1)
@@ -127,7 +130,7 @@ def render_gui():
     for i, key in enumerate(WHITE_KEYS):
         if i%7 != 2 and i%7 != 6:
             black_x = i * WHITE_KEY_WIDTH + (WHITE_KEY_WIDTH - BLACK_KEY_WIDTH / 2)
-            black_rect = pygame.Rect(black_x, 0, BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT)
+            black_rect = pygame.Rect(black_x,  SETTINGS_HEIGHT, BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT)
             color = GRAY if BLACK_KEYS[black_key_index] in pressed_keys else BLACK
             pygame.draw.rect(screen, color, black_rect)
             pygame.draw.rect(screen, (55, 60, 69), black_rect, 5)
@@ -139,6 +142,9 @@ sustain = True
 is_recording = False
 octaves = [3, 4, 5, 6]
 set_octaves()
+chord_shortcuts = {}
+
+current_recording = []
 
 
 # --- Game loop ---
@@ -156,8 +162,7 @@ while running:
                 channels[event.key].stop()
                 channels[event.key].play(sounds[event.key], loops=0)
                 pressed_keys.add(event.key)
-            elif event.key == pygame.K_SPACE:
-                sustain = not sustain
+
             elif event.key == pygame.K_RIGHT:
                 if octaves[-1] < 7:
                     octaves = [octave + 1 for octave in octaves]
@@ -166,12 +171,19 @@ while running:
                 if octaves[0] > 1:
                     octaves = [octave - 1 for octave in octaves]
                     set_octaves()
+            elif event.key == pygame.K_LCTRL:
+                is_recording = True
             
         elif event.type == pygame.KEYUP:
             if event.key in sounds:
                 if not sustain:
                     channels[event.key].stop()
                 pressed_keys.discard(event.key)
+
+
+            elif event.key == pygame.K_SPACE:
+                sustain = not sustain
+                
 
     pygame.display.flip()
 
