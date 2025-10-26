@@ -1,5 +1,6 @@
 import pygame
 from pydub import AudioSegment
+import time
 
 pygame.init()
 pygame.mixer.init()
@@ -113,13 +114,42 @@ SCREEN_HEIGHT = WHITE_KEY_HEIGHT + SETTINGS_HEIGHT
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+option_rect = pygame.Rect(55, SETTINGS_HEIGHT - 75, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT)
+
 
 WHITE_KEYS = []
 BLACK_KEYS = []
 
+# Buttons
+
+record_img_on = pygame.transform.scale(
+    pygame.image.load("assets/buttons/record_2.png").convert_alpha(),
+    (120, 50)
+)
+record_img_off = pygame.transform.scale(
+    pygame.image.load("assets/buttons/record_1.png").convert_alpha(),
+    (120, 50)
+)
+
+option_rect = record_img_on.get_rect(topleft=(120, 50))
+
+
 def render_gui():
     pygame.display.set_caption(f'Pyano - Octaves {octaves}')
     screen.fill((143, 140, 140))
+
+    # Settings
+    option_rect = pygame.Rect(55, SETTINGS_HEIGHT - 100, 60, 40)
+
+    if is_recording:
+        screen.blit(record_img_on, option_rect)
+    else:
+        screen.blit(record_img_off, option_rect)
+
+
+
+
+    # Piano
     for i, key in enumerate(WHITE_KEYS):
         white_rect = pygame.Rect(i * WHITE_KEY_WIDTH, SETTINGS_HEIGHT, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT)
         color = BLUE if key in pressed_keys else WHITE
@@ -146,7 +176,6 @@ chord_shortcuts = {}
 
 current_recording = []
 
-
 # --- Game loop ---
 running = True
 while running:
@@ -172,7 +201,7 @@ while running:
                     octaves = [octave - 1 for octave in octaves]
                     set_octaves()
             elif event.key == pygame.K_LCTRL:
-                is_recording = True
+                is_recording = not is_recording
             
         elif event.type == pygame.KEYUP:
             if event.key in sounds:
@@ -183,7 +212,7 @@ while running:
 
             elif event.key == pygame.K_SPACE:
                 sustain = not sustain
-                
+
 
     pygame.display.flip()
 
