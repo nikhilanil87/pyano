@@ -7,6 +7,7 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(52)
 
+shortcut_map = {}  # key: pygame key, value: index of session_recordings
 session_recordings = []
 
 # --- Piano sound logic ---
@@ -125,7 +126,7 @@ def save_recording(events):
         final_audio = final_audio.overlay(note_audio, position=int(e["start_time"] * 1000))
 
     # Ask user for filename
-    filename = get_filename_popup(f"Recording_{len(session_recordings)+1}")
+    filename, shortcut_key = get_filename_and_shortcut(f"Recording_{len(session_recordings)+1}")
 
     if filename:
         # Ensure .wav extension
@@ -147,37 +148,21 @@ def save_recording(events):
     else:
         print("Recording discarded.")
 
+    if shortcut_key:
+        shortcut_map[shortcut_key] = len(session_recordings) - 1
+        print(f"Shortcut assigned: {pygame.key.name(shortcut_key)} → {filename}")
 
 def play_recording(events):
     if not events:
         print("No notes to play.")
         return
-
-    # Sort events by start time
+    
     events = sorted(events, key=lambda e: e["start_time"])
     start_playback = time.time()
 
     for e in events:
-        while time.time() - start_playback < e["start_time"]:
-            pygame.event.pump()
-            time.sleep(0.001)
-
-
-        sound = pygame.mixer.Sound(e["sound_path"])
-        channel = pygame.mixer.find_channel()
-        if channel:
-            channel.play(sound, loops=0)
-
-        pressed_keys.add(e["key_input"])
-
-        def remove_key(key, duration):
-            time.sleep(duration)
-            pressed_keys.discard(key)
-
-        import threading
-        threading.Thread(target=remove_key, args=(e["key_input"], e["duration"]), daemon=True).start()
-
-
+        pygame.event.post(e['event'])
+        render_gui()
 
 # --- GUI Setup ---
 WHITE = (255, 255, 255)
@@ -290,17 +275,17 @@ def render_dropdown():
             item_text = font.render(rec["name"], True, BLACK)
             screen.blit(item_text, (item_rect.x + 10, item_rect.y + 8))
 
-def get_filename_popup(default_name="Recording"):
+def get_filename_and_shortcut(default_name="Recording"):
     input_active = True
     user_text = default_name
     font = pygame.font.Font(None, 32)
     input_box = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 20, 200, 40)
-    
+
     while input_active:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return None
+                return None, None
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     input_active = False
@@ -309,7 +294,7 @@ def get_filename_popup(default_name="Recording"):
                 else:
                     user_text += event.unicode
 
-        # Draw semi-transparent overlay
+        # Draw overlay
         overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         overlay.set_alpha(180)
         overlay.fill((50, 50, 50))
@@ -317,19 +302,56 @@ def get_filename_popup(default_name="Recording"):
 
         label = font.render("Enter filename:", True, WHITE)
         screen.blit(label, (SCREEN_WIDTH//2 - label.get_width()//2, input_box.y - 40))
-
-        # Draw input box
         pygame.draw.rect(screen, WHITE, input_box)
         pygame.draw.rect(screen, BLACK, input_box, 2)
-
-        # Render text
         text_surface = font.render(user_text, True, BLACK)
         screen.blit(text_surface, (input_box.x + 5, input_box.y + 8))
-
         pygame.display.flip()
-    
-    return user_text
 
+    # ---- Shortcut assignment prompt ----
+    shortcut_key = None
+    ask_shortcut = True
+    while ask_shortcut:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return user_text, None
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:
+                    print("Press a key to set as shortcut...")
+                    shortcut_key = wait_for_keypress()
+                    ask_shortcut = False
+                elif event.key == pygame.K_n:
+                    ask_shortcut = False
+
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(180)
+        overlay.fill((50, 50, 50))
+        screen.blit(overlay, (0, 0))
+
+        label = font.render("Set shortcut? (Y/N)", True, WHITE)
+        screen.blit(label, (SCREEN_WIDTH//2 - label.get_width()//2, SCREEN_HEIGHT//2 - 20))
+        pygame.display.flip()
+
+    return user_text, shortcut_key
+
+
+def wait_for_keypress():
+    waiting = True
+    font = pygame.font.Font(None, 32)
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                print(f"Shortcut key set: {pygame.key.name(event.key)}")
+                waiting = False
+                return event.key
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(180)
+        overlay.fill((50, 50, 50))
+        screen.blit(overlay, (0, 0))
+        label = font.render("Press any key for shortcut...", True, WHITE)
+        screen.blit(label, (SCREEN_WIDTH//2 - label.get_width()//2, SCREEN_HEIGHT//2 - 20))
+        pygame.display.flip()
 
 # --- Settings ---
 sustain = True
@@ -346,7 +368,6 @@ num_recordings = 1
 # --- Game loop ---
 running = True
 while running:
-
     render_gui()
 
     for event in pygame.event.get():
@@ -363,6 +384,7 @@ while running:
                 start = time.time() - record_start_time
                 active_notes[event.key] = start
 
+            # Switching octaves
 
             elif event.key == pygame.K_RIGHT:
                 if octaves[-1] < 7:
@@ -372,6 +394,11 @@ while running:
                 if octaves[0] > 1:
                     octaves = [octave - 1 for octave in octaves]
                     set_octaves()
+
+
+#example changes
+
+            # Record option        
             elif event.key == pygame.K_LCTRL:
                 is_recording = not is_recording
                 if is_recording:
@@ -383,15 +410,40 @@ while running:
                     print("Recording stopped.")
                     save_recording(current_recording)
 
+            # Quit
             elif event.key == pygame.K_ESCAPE:
                 running = False
-            
+
+            # Creating shortcuts
+
+            if event.key in shortcut_map:
+                rec_index = shortcut_map[event.key]
+                rec = session_recordings[rec_index]
+                print(f"Shortcut triggered: Playing {rec['name']}")
+                play_recording(rec["events"])
+
+                # --- Log shortcut if recording is active ---
+                if is_recording:
+                    shortcut_start = time.time() - record_start_time
+                    shortcut_duration = max(
+                        e["start_time"] + e["duration"] for e in rec["events"]
+                    )
+                    current_recording.append({
+                        "event": event,
+                        "sound_path": rec["file_path"],  # reference to pre-saved file
+                        "note": f"shortcut_{pygame.key.name(event.key)}",
+                        "start_time": shortcut_start,
+                        "duration": shortcut_duration
+                    })
+
         elif event.type == pygame.KEYUP:
+            # Piano key up
             if event.key in sounds:
                 if not sustain:
                     channels[event.key].stop()
                 pressed_keys.discard(event.key)
 
+            # Record times, if recording
             if is_recording and event.key in active_notes:
                 note = sounds[event.key]
                 start_time = active_notes[event.key]
@@ -401,7 +453,7 @@ while running:
                     duration = time.time() - record_start_time
 
                 current_recording.append({
-                    "key_input" : event.key,
+                    "event" : event,
                     "sound_path": sound_paths[event.key],
                     "note": event.key,
                     "start_time": start_time,
@@ -412,6 +464,7 @@ while running:
             elif event.key == pygame.K_SPACE:
                 sustain = not sustain
 
+        # UI interaction for dropdown box
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mx, my = event.pos
 
@@ -438,6 +491,3 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
-
-
-# HEAR ME OUT: i put the play recording functio in the gui render function. i pop only when the time has passed and i put in the pressed keys!
