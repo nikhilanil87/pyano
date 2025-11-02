@@ -43,7 +43,7 @@ Pyano/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/Pyano.git
+git clone https://github.com/nikhilanil87/Pyano.git
 cd Pyano
 ```
 
