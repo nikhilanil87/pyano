@@ -1,7 +1,7 @@
 # 🎹 **Pyano — A Virtual Piano with Recording, Playback & Shortcuts**
 
 **Pyano** is a Python-based virtual piano built using **Pygame** and **Pydub**.
-It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions effortlessly — all within an intuitive, interactive interface.
+It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions seamlessly — all within an intuitive interface.
 
 ---
 
@@ -10,10 +10,10 @@ It lets you play notes from your keyboard, record sessions, assign custom shortc
 * 🎵 **Interactive Piano Interface** – Play realistic piano notes directly from your keyboard.
 * 🔴 **Recording & Exporting** – Record your performances and export them as `.wav` files.
 * ⚡ **Shortcut Mappings** – Assign any key to instantly replay saved recordings.
-* 🎧 **Layered Playback** – Overlay multiple recordings to create rich, blended tracks.
-* 🎹 **Graphical Interface** – White and black keys rendered with real-time color feedback.
-* 🔼 **Octave Shifting** – Move between octaves using the arrow keys.
-* 🧵 **Threaded Saving** – Exports recordings in a background thread, keeping the GUI smooth.
+* 🎧 **Layered Playback** – Overlay multiple recordings for rich, blended sound.
+* 🎹 **Graphical Interface** – Real-time visual feedback on pressed keys.
+* 🔼 **Octave Shifting** – Move between octaves using arrow keys.
+* 🧵 **Threaded Saving** – Recordings are saved in a background thread for smooth performance.
 
 ---
 
@@ -22,7 +22,8 @@ It lets you play notes from your keyboard, record sessions, assign custom shortc
 ```
 Pyano/
 │
-├── main.py                # Main application file
+├── pyano.py                # Full-featured version (recording, playback, shortcuts)
+├── simple_pyano.py         # Lightweight version (basic virtual piano only)
 │
 ├── assets/
 │   ├── buttons/
@@ -30,9 +31,9 @@ Pyano/
 │   │   ├── record_2.png
 │   │   ├── dd_1.png
 │   │   └── dd_2.png
-│   ├── A0.wav … C8.wav    # All piano note audio files
+│   ├── A0.wav … C8.wav     # All piano note audio files
 │
-└── recordings/            # Automatically created for saved performances
+└── recordings/             # Automatically created for saved performances
 ```
 
 ---
@@ -66,64 +67,72 @@ pip install pygame pydub
 
 ## 🚀 **How to Use**
 
-### Start the Piano
+### 🪄 Run the Full Version (with Recording & Shortcuts)
 
 ```bash
-python main.py
+python pyano.py
 ```
 
-### Keyboard Controls
+### 🎹 Run the Simple Piano (basic playback only)
 
-| Action                           | Key                       |
-| -------------------------------- | ------------------------- |
-| **Play Notes**                   | `W, E, R, T, Y...` etc.   |
-| **Start / Stop Recording**       | `Left Ctrl`               |
-| **Toggle Sustain (Hold Notes)**  | `Space`                   |
-| **Shift Octave Up**              | `→`                       |
-| **Shift Octave Down**            | `←`                       |
-| **Open / Close Dropdown**        | Click top dropdown button |
-| **Play Recording from Dropdown** | Click on recording name   |
-| **Exit**                         | `Esc`                     |
+```bash
+python simple_pyano.py
+```
+
+---
+
+### 🎛 Keyboard Controls (Full Version)
+
+| Action                           | Key                     |
+| -------------------------------- | ----------------------- |
+| **Play Notes**                   | `W, E, R, T, Y...` etc. |
+| **Start / Stop Recording**       | `Left Ctrl`             |
+| **Toggle Sustain (Hold Notes)**  | `Space`                 |
+| **Shift Octave Up**              | `→`                     |
+| **Shift Octave Down**            | `←`                     |
+| **Open / Close Dropdown**        | Click top dropdown      |
+| **Play Recording from Dropdown** | Click on recording name |
+| **Exit**                         | `Esc`                   |
 
 ---
 
 ## 🎙️ **Recording and Shortcuts**
 
 1. Press **Left Ctrl** to start recording.
-   → Notes you play are captured with precise timing and duration.
+   → Notes you play are captured with timing and duration.
 2. Press **Left Ctrl** again to stop.
-3. You’ll be prompted to **enter a filename** for your recording.
-4. Then choose whether to **assign a shortcut key** (`Y/N`).
+3. Enter a **filename** for the recording.
+4. Choose whether to **assign a shortcut key** (`Y/N`).
 
-   * If yes, press any key to set it.
-5. Once saved, your recording appears in the dropdown and in the `recordings/` folder.
+   * If yes, press any key to bind it.
+5. Your recording appears in the dropdown and inside the `recordings/` folder.
 
-> 🎼 You can instantly replay any saved recording using its assigned shortcut key.
+> 🎼 Tip: Instantly replay any saved recording using its assigned shortcut key.
 
 ---
 
 ## 🧩 **How It Works**
 
-* Uses **Pygame mixer channels** to play up to 52 notes simultaneously.
-* Each key press triggers a sound from `assets/` mapped to the current octave.
-* Recordings store timing, duration, and sound path as event dictionaries.
-* **Pydub** overlays recorded notes to produce a full `.wav` file asynchronously (via threads).
+* **Pygame mixer channels** handle up to 52 notes simultaneously.
+* Each key triggers a corresponding sound from the `assets/` folder based on the active octave.
+* Recordings store key events (timing, duration, and sound paths) as structured dictionaries.
+* **Pydub** layers these sounds to generate `.wav` files asynchronously via threads.
 
 ---
 
 ## 📦 **Dependencies**
 
-| Library     | Purpose                                      |
-| ----------- | -------------------------------------------- |
-| `pygame`    | GUI rendering, key input, and audio playback |
-| `pydub`     | Mixing and exporting `.wav` files            |
-| `threading` | Handles non-blocking background exports      |
+| Library     | Purpose                                           |
+| ----------- | ------------------------------------------------- |
+| `pygame`    | GUI, keyboard input, and real-time sound playback |
+| `pydub`     | Audio overlaying and exporting recordings         |
+| `threading` | Background saving of `.wav` files                 |
 
 ---
 
 ## 📜 **License**
 
-This project is licensed under the **MIT License** — feel free to use, remix, and expand it for your own musical experiments.
+Licensed under the **MIT License** — feel free to use, modify, and expand for your own musical experiments.
 
 ---
 
