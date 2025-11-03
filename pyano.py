@@ -91,10 +91,13 @@ record_img_on = pygame.transform.scale(pygame.image.load("assets/buttons/record_
 record_img_off = pygame.transform.scale(pygame.image.load("assets/buttons/record_1.png").convert_alpha(), (120, 50))
 dd_1 = pygame.transform.scale(pygame.image.load("assets/buttons/dd_1.png").convert_alpha(), (175, 50))
 dd_2 = pygame.transform.scale(pygame.image.load("assets/buttons/dd_2.png").convert_alpha(), (175, 50))
+sus_on = pygame.transform.scale(pygame.image.load("assets/buttons/sus_on.png").convert_alpha(), (300, 60))
+sus_off = pygame.transform.scale(pygame.image.load("assets/buttons/sus_off.png").convert_alpha(), (300, 60))
 
 dropdown_open = False
 selected_recording = None
 dropdown_rect = pygame.Rect(200, 20, 180, 40)
+sus_rect = pygame.Rect(400, 20, 175, 50)
 
 # --- Recording / Playback ---
 
@@ -162,6 +165,8 @@ def play_note_on(note_key):
 
 def play_note_off(note_key):
     global playback_keys
+    if not sustain:
+        channels[note_key].stop()
     playback_keys.discard(note_key)
 
 def play_recording(events):
@@ -176,11 +181,11 @@ def play_recording(events):
         start_time = e["start_time"]
         duration = e["duration"]
         
+
         threading.Timer(start_time, play_note_on, args=[note_key]).start()
         
-        threading.Timer(start_time + duration, play_note_off, args=[note_key]).start()
-
-
+        threading.Timer(duration, play_note_off, args=[note_key]).start()
+            
 # --- GUI Functions ---
 
 def render_dropdown():
@@ -239,6 +244,11 @@ def render_gui():
                 pygame.draw.rect(screen, (55, 60, 69), black_rect, 5)
                 black_key_index += 1
     render_dropdown()
+    if sustain:
+        screen.blit(sus_on, sus_rect.topleft)
+    else:
+        screen.blit(sus_off, sus_rect.topleft)
+
 
 
 def get_filename_and_shortcut(default_name="Recording"):
@@ -392,7 +402,7 @@ def get_inputs():
             if is_recording and event.key in active_notes:
                 start_time = active_notes[event.key]
                 
-                duration = (time.time() - record_start_time) - start_time
+                duration = time.time() - record_start_time
                 
                 current_recording.append({
                     "event": event,
