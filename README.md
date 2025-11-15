@@ -57,8 +57,10 @@ pip install pygame pydub
 
 > **Note:**
 > `pydub` requires **ffmpeg**.
-> (You can skip this if you just want the playable piano without recording and playback features. (simple_pyano.py))
-> Install it via:
+> 
+> You can skip this if you just want the playable piano without recording and playback features. (simple_pyano.py)
+> 
+> Install it ffmpeg via:
 >
 > * **Windows:** [Download from ffmpeg.org](https://ffmpeg.org/download.html)
 > * **macOS:** `brew install ffmpeg`
