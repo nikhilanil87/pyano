@@ -1,44 +1,24 @@
 # 🎹 **Pyano — A Virtual Piano with Recording, Playback & Shortcuts**
 
 **Pyano** is a Python-based virtual piano built using **Pygame** and **Pydub**.
-It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions seamlessly — all within an intuitive interface.
+It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions seamlessly.
+<img width="1396" height="478" alt="image" src="https://github.com/user-attachments/assets/cf648bde-e5f8-463c-aece-d1b781a3aafe" />
 
 ---
 
-## 🌟 **Features**
+## **Features**
 
-* 🎵 **Interactive Piano Interface** – Play realistic piano notes directly from your keyboard.
-* 🔴 **Recording & Exporting** – Record your performances and export them as `.wav` files.
-* ⚡ **Shortcut Mappings** – Assign any key to instantly replay saved recordings.
-* 🎧 **Layered Playback** – Overlay multiple recordings for rich, blended sound.
-* 🎹 **Graphical Interface** – Real-time visual feedback on pressed keys.
-* 🔼 **Octave Shifting** – Move between octaves using arrow keys.
-* 🧵 **Threaded Saving** – Recordings are saved in a background thread for smooth performance.
-
----
-
-## 📂 **Project Structure**
-
-```
-Pyano/
-│
-├── pyano.py                # Full-featured version (recording, playback, shortcuts)
-├── simple_pyano.py         # Lightweight version (basic virtual piano only)
-│
-├── assets/
-│   ├── buttons/
-│   │   ├── record_1.png
-│   │   ├── record_2.png
-│   │   ├── dd_1.png
-│   │   └── dd_2.png
-│   ├── A0.wav … C8.wav     # All piano note audio files
-│
-└── recordings/             # Automatically created for saved performances
-```
+**Interactive Piano Interface** – Play realistic piano notes directly from your keyboard.
+**Recording & Exporting** – Record your performances and export them as `.wav` files.
+**Shortcut Mappings** – Assign any key to instantly replay saved recordings.
+**Layered Playback** – Overlay multiple recordings for rich, blended sound.
+**Graphical Interface** – Real-time visual feedback on pressed keys.
+**Octave Shifting** – Move between octaves using arrow keys.
+**Threaded Saving** – Recordings are saved in a background thread for smooth performance.
 
 ---
 
-## ⚙️ **Installation**
+## **Installation**
 
 ### 1. Clone the Repository
 
@@ -68,15 +48,15 @@ pip install pygame pydub
 
 ---
 
-## 🚀 **How to Use**
+## **How to Use**
 
-### 🪄 Run the Full Version (with Recording & Shortcuts)
+Run the Full Version (with Recording & Shortcuts)
 
 ```bash
 python pyano.py
 ```
 
-### 🎹 Run the Simple Piano (basic playback only)
+Run the Simple Piano (basic playback only)
 
 ```bash
 python simple_pyano.py
@@ -84,7 +64,7 @@ python simple_pyano.py
 
 ---
 
-### 🎛 Keyboard Controls (Full Version)
+###Keyboard Controls (Full Version)
 
 | Action                           | Key                     |
 | -------------------------------- | ----------------------- |
@@ -99,7 +79,7 @@ python simple_pyano.py
 
 ---
 
-## 🎙️ **Recording and Shortcuts**
+## **Recording and Shortcuts**
 
 1. Press **Left Ctrl** to start recording.
    → Notes you play are captured with timing and duration.
@@ -110,11 +90,11 @@ python simple_pyano.py
    * If yes, press any key to bind it.
 5. Your recording appears in the dropdown and inside the `recordings/` folder.
 
-> 🎼 Tip: Instantly replay any saved recording using its assigned shortcut key.
+Instantly replay any saved recording using its assigned shortcut key.
 
 ---
 
-## 🧩 **How It Works**
+## **How It Works**
 
 * **Pygame mixer channels** handle up to 52 notes simultaneously.
 * Each key triggers a corresponding sound from the `assets/` folder based on the active octave.
@@ -123,7 +103,28 @@ python simple_pyano.py
 
 ---
 
-## 📦 **Dependencies**
+## **Project Structure**
+
+```
+Pyano/
+│
+├── pyano.py                # Full-featured version (recording, playback, shortcuts)
+├── simple_pyano.py         # Lightweight version (basic virtual piano only)
+│
+├── assets/
+│   ├── buttons/
+│   │   ├── record_1.png
+│   │   ├── record_2.png
+│   │   ├── dd_1.png
+│   │   └── dd_2.png
+│   ├── A0.wav … C8.wav     # All piano note audio files
+│
+└── recordings/             # Automatically created for saved performances
+```
+
+---
+
+## **Dependencies**
 
 | Library     | Purpose                                           |
 | ----------- | ------------------------------------------------- |
@@ -133,12 +134,12 @@ python simple_pyano.py
 
 ---
 
-## 📜 **License**
+## **License**
 
 Licensed under the **MIT License** — feel free to use, modify, and expand for your own musical experiments.
 
 ---
 
-## 👨‍💻 **Author**
+## **Author**
 
 **Nikhil A** — *B.Tech Computer Science*
