@@ -1,20 +1,18 @@
 # **Pyano — A Virtual Piano with Recording, Playback & Shortcuts**
 
-**Pyano** is a Python-based virtual piano built using **Pygame** and **Pydub**.
-It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions seamlessly.
+Pyano is a Python-based virtual piano built using python. You can play piano notes from your keyboard.
+Play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions.
 <img width="1396" height="478" alt="image" src="https://github.com/user-attachments/assets/cf648bde-e5f8-463c-aece-d1b781a3aafe" />
 
 ---
 
 ## **Features**
 
-**Interactive Piano Interface** – Play realistic piano notes directly from your keyboard.
-**Recording & Exporting** – Record your performances and export them as `.wav` files.
-**Shortcut Mappings** – Assign any key to instantly replay saved recordings.
-**Layered Playback** – Overlay multiple recordings for rich, blended sound.
-**Graphical Interface** – Real-time visual feedback on pressed keys.
-**Octave Shifting** – Move between octaves using arrow keys.
-**Threaded Saving** – Recordings are saved in a background thread for smooth performance.
+* **Recording & Exporting** – Record your performances and export them as `.wav` files.
+* **Shortcut Mappings** – Assign any key to replay saved recordings in a session.
+* **Layered Playback** – It's possible to overlay multiple recordings.
+* **Graphical Interface** – Real-time visual feedback on pressed keys.
+* **Octave Shifting** – Move between octaves using arrow keys.
 
 ---
 
@@ -63,8 +61,18 @@ python simple_pyano.py
 ```
 
 ---
+## **Recording and Shortcuts**
 
-###Keyboard Controls (Full Version)
+1. Press **Left Ctrl** to start recording.
+2. Press **Left Ctrl** again to stop.
+3. Enter a filename for the recording.
+4. Choose whether to assign a shortcut key (`Y/N`). If yes, press any key to bind it.
+5. Your recording appears in the dropdown and inside the `recordings/` folder.
+
+Replay any saved recording using its assigned shortcut key in a session.
+
+---
+## **Keyboard Controls**
 
 | Action                           | Key                     |
 | -------------------------------- | ----------------------- |
@@ -74,23 +82,8 @@ python simple_pyano.py
 | **Shift Octave Up**              | `→`                     |
 | **Shift Octave Down**            | `←`                     |
 | **Open / Close Dropdown**        | Click top dropdown      |
-| **Play Recording from Dropdown** | Click on recording name |
+| **Left Ctrl**                    | Record                  |
 | **Exit**                         | `Esc`                   |
-
----
-
-## **Recording and Shortcuts**
-
-1. Press **Left Ctrl** to start recording.
-   → Notes you play are captured with timing and duration.
-2. Press **Left Ctrl** again to stop.
-3. Enter a **filename** for the recording.
-4. Choose whether to **assign a shortcut key** (`Y/N`).
-
-   * If yes, press any key to bind it.
-5. Your recording appears in the dropdown and inside the `recordings/` folder.
-
-Instantly replay any saved recording using its assigned shortcut key.
 
 ---
 
@@ -128,18 +121,8 @@ Pyano/
 
 | Library     | Purpose                                           |
 | ----------- | ------------------------------------------------- |
-| `pygame`    | GUI, keyboard input, and real-time sound playback |
+| `pygame`    | GUI, keyboard input, and sound playback           |
 | `pydub`     | Audio overlaying and exporting recordings         |
 | `threading` | Background saving of `.wav` files                 |
 
 ---
-
-## **License**
-
-Licensed under the **MIT License** — feel free to use, modify, and expand for your own musical experiments.
-
----
-
-## **Author**
-
-**Nikhil A** — *B.Tech Computer Science*
