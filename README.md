@@ -1,4 +1,4 @@
-# 🎹 **Pyano — A Virtual Piano with Recording, Playback & Shortcuts**
+# **Pyano — A Virtual Piano with Recording, Playback & Shortcuts**
 
 **Pyano** is a Python-based virtual piano built using **Pygame** and **Pydub**.
 It lets you play notes from your keyboard, record sessions, assign custom shortcuts, and replay your compositions seamlessly.
